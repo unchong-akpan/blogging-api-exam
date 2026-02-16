@@ -1,6 +1,6 @@
 require('dotenv').config();
 const express = require('express');
-const connectDB = require('./config/db');
+const { connectDB } = require('./config/db');
 
 const app = express();
 
@@ -11,7 +11,7 @@ app.use(express.json());
 
 app.get('/', (req, res) => {
   res.status(200).json({
-    message: "Welcome to the Blogging API! 🚀",
+    message: "Welcome to the Blogging API!",
     description: "A RESTful blogging platform built with Node.js, Express, MongoDB, Mongoose, and JWT authentication for user registration, login, and blog management.",
     author: "Unchong Akpan",
     status: "API is live and running",
@@ -39,5 +39,15 @@ app.get('/', (req, res) => {
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/blogs', require('./routes/blog'));
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// Export the app for testing
+module.exports = app;
+
+// Only start the server if this file is run directly (not imported)
+if (require.main === module) {
+  connectDB();
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}
+
