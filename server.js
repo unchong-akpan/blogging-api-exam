@@ -4,8 +4,10 @@ const { connectDB } = require('./config/db');
 
 const app = express();
 
-// Connect DB
-connectDB();
+// Connect DB (skip during tests)
+if (process.env.NODE_ENV !== 'test') {
+  connectDB();
+}
 
 app.use(express.json());
 
